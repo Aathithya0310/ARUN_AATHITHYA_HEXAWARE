@@ -1,0 +1,73 @@
+CREATE DATABASE CRIME_DB;
+USE CRIME_DB;
+CREATE TABLE LawEnforcementAgencies (
+    AgencyID INT PRIMARY KEY AUTO_INCREMENT,
+    AgencyName VARCHAR(100),
+    Jurisdiction VARCHAR(100),
+    ContactInfo VARCHAR(255)
+);
+
+CREATE TABLE Victims (
+    VictimID INT PRIMARY KEY AUTO_INCREMENT,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    DateOfBirth DATE,
+    Gender VARCHAR(10),
+    ContactInfo VARCHAR(255)
+);
+
+CREATE TABLE Suspects (
+    SuspectID INT PRIMARY KEY AUTO_INCREMENT,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    DateOfBirth DATE,
+    Gender VARCHAR(10),
+    ContactInfo VARCHAR(255)
+);
+
+CREATE TABLE Officers (
+    OfficerID INT PRIMARY KEY AUTO_INCREMENT,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    BadgeNumber VARCHAR(20),
+    RANKED VARCHAR(20),
+    ContactInfo VARCHAR(255),
+    AgencyID INT,
+    FOREIGN KEY (AgencyID) REFERENCES LawEnforcementAgencies(AgencyID)
+);
+
+CREATE TABLE Incidents (
+    IncidentID INT PRIMARY KEY AUTO_INCREMENT,
+    IncidentType VARCHAR(50),
+    IncidentDate DATE,
+    Latitude DOUBLE,
+    Longitude DOUBLE,
+    Description TEXT,
+    Status VARCHAR(50),
+    VictimID INT,
+    SuspectID INT,
+    OfficerID INT,
+    FOREIGN KEY (VictimID) REFERENCES Victims(VictimID),
+    FOREIGN KEY (SuspectID) REFERENCES Suspects(SuspectID),
+    FOREIGN KEY (OfficerID) REFERENCES Officers(OfficerID)
+);
+
+CREATE TABLE Evidence (
+    EvidenceID INT PRIMARY KEY AUTO_INCREMENT,
+    Description TEXT,
+    LocationFound VARCHAR(255),
+    IncidentID INT,
+    FOREIGN KEY (IncidentID) REFERENCES Incidents(IncidentID)
+);
+
+CREATE TABLE Reports (
+    ReportID INT PRIMARY KEY AUTO_INCREMENT,
+    IncidentID INT,
+    ReportingOfficer INT,
+    ReportDate DATE,
+    ReportDetails TEXT,
+    Status VARCHAR(50),
+    FOREIGN KEY (IncidentID) REFERENCES Incidents(IncidentID),
+    FOREIGN KEY (ReportingOfficer) REFERENCES Officers(OfficerID)
+);
+
